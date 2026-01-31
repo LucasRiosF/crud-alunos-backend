@@ -5,6 +5,18 @@ async function listar(req, res) {
     res.json(alunos);
 }
 
+async function buscarPorID(req, res) {
+    const { id } = req.params;
+    const aluno = await alunosService.buscarPorID(id);
+
+    if(!aluno){
+        return res.status(404).json({ mensagem: "Aluno não encontrado" });
+    }
+
+    res.json(aluno);
+    
+}
+
 async function criar(req, res) {
     const aluno = await alunosService.criar(req.body);
     res.status(201).json(aluno);
@@ -22,4 +34,4 @@ async function deletar(req, res) {
     res.status(204).send();
 }
 
-export default { criar, listar, atualizar, deletar }
+export default { criar, listar, atualizar, deletar, buscarPorID }

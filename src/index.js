@@ -8,15 +8,6 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-/*app.post('/alunos', (req, res) => {
-    console.log(req.body);
-    res.send('OK');
-});
-
-app.get('/alunos', (req, res) => {
-    res.send('OK');
-});*/
-
 app.use("/alunos", alunosRoutes);
 
 app.listen(PORT, () => {

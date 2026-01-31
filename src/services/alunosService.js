@@ -5,6 +5,11 @@ async function listar() {
     return result.rows;
 }
 
+async function buscarPorID(id) {
+    const result = await pool.query("SELECT * FROM alunos WHERE id = $1", [id]);
+    return result.rows[0];
+}
+
 async function criar({ nome, email}) {
     const result = await pool.query("INSERT INTO alunos (nome, email) VALUES ($1, $2) RETURNING*", [nome, email]);
    return result.rows[0]; 
@@ -19,4 +24,4 @@ async function deletar(id) {
     await pool.query("DELETE FROM alunos WHERE id = $1", [id]);
 }
 
-export default { listar, criar, atualizar, deletar }
+export default { listar, criar, atualizar, deletar, buscarPorID }
