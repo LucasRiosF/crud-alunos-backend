@@ -1,27 +1,38 @@
-import pool from "../database.js";
+import prisma from "../database/prismaClient.js";
 
 async function listar() {
-    const result = await pool.query("SELECT * FROM alunos");
-    return result.rows;
+    return await  prisma.aluno.findMany()
 }
 
 async function buscarPorID(id) {
-    const result = await pool.query("SELECT * FROM alunos WHERE id = $1", [id]);
-    return result.rows[0];
+    return await prisma.aluno.findUnique({
+        where: { id: Number(id) }
+    })
 }
 
-async function criar({ nome, email}) {
-    const result = await pool.query("INSERT INTO alunos (nome, email) VALUES ($1, $2) RETURNING*", [nome, email]);
-   return result.rows[0]; 
+async function criar(dados) {
+    return await prisma.aluno.create({
+        data: {
+            nome: dados.nome,
+            email: dados.email
+        }
+    })
 }
 
-async function atualizar(id, { nome, email }) {
-    const result = await pool.query("UPDATE alunos SET nome = $1, email = $2 WHERE id = $3 RETURNING *", [nome, email, id]);
-    return result.rows[0];
+async function atualizar(id, dados) {
+    return await prisma.aluno.update({
+        where: {id: Number(id)},
+        data: {
+            nome: dados.nome,
+            email: dados.email
+        }
+    })
 }
 
 async function deletar(id) {
-    await pool.query("DELETE FROM alunos WHERE id = $1", [id]);
+    return await prisma.aluno.delete({
+        where: {id: Number(id)}
+    })
 }
 
 export default { listar, criar, atualizar, deletar, buscarPorID }
